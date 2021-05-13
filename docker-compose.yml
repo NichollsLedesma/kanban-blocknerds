@@ -1,0 +1,97 @@
+version: "3.3"
+services:
+   nginx:
+      depends_on:
+         - pgsql
+         - php
+      restart: unless-stopped
+      tty: true
+      build:
+        dockerfile: Dockerfile
+        context: ./nginx
+      environment:
+         TZ: America/Argentina/Buenos_Aires
+      ports:
+         - '80:80'
+         - "443:443"
+      volumes:
+         - ./src-app:/var/www/html/
+      container_name: container_ngnix
+      networks:
+         - blocknerds-network
+
+   pgsql:
+      build:
+         dockerfile: Dockerfile
+         context: ./pgsql
+      restart: always
+      tty: true
+      environment:
+         POSTGRES_USER: "dev"
+         POSTGRES_PASSWORD: "d3v"
+         POSTGRES_DB: "kanban_blocknerds"
+      ports:
+         - '5432:5432'
+      volumes:
+         - "./var/lib/pgdata:/var/lib/postgresql/data"
+      container_name: container_pgsql
+      networks:
+         - blocknerds-network
+   php:
+      depends_on:
+         - pgsql
+         - redis
+      restart: always
+      build:
+         dockerfile: Dockerfile
+         context: ./php
+         args:
+            UID: 1000
+            GID: 1000
+      ports:
+         - '9002:9000'      
+      volumes:
+         - "./src-app:/var/www/html/"
+      container_name: container_php
+      networks:
+         - blocknerds-network
+
+   redis:
+      build:
+         dockerfile: Dockerfile
+         context: ./redis
+      container_name: container_redis
+      ports:
+         - '6379:6379'
+      networks:
+         - blocknerds-network
+
+   mail:
+      container_name: container_mail
+      build:
+         dockerfile: Dockerfile
+         context: ./mailhog
+      logging:
+         driver: 'none'
+      ports:
+         - 1025:1025 # smtp server
+         - 8025:8025 # web
+      networks:
+         - blocknerds-network
+
+   rabbitmq:
+      build:
+         dockerfile: Dockerfile
+         context: ./rabbitmq
+      environment:
+         TZ: America/Argentina/Buenos_Aires
+      ports:
+         - '5672:49582'
+         - '15692:15692'
+      container_name: container_rabbitmq
+      networks:
+         - blocknerds-network
+      
+networks:
+   blocknerds-network:
+      driver: bridge
