@@ -82,9 +82,8 @@ class SiteController extends Controller
         ]));
 
 
-        VarDumper::dump( $id);
-        // echo ($id) ? "OK" : "KO";
-die;
+        VarDumper::dump($id);
+        die;
     }
 
     /**
