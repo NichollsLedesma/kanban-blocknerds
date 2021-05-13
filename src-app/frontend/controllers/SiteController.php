@@ -1,6 +1,8 @@
 <?php
+
 namespace frontend\controllers;
 
+use app\jobs\CreateLogs;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -14,6 +16,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\helpers\VarDumper;
 
 /**
  * Site controller
@@ -67,6 +70,23 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionTest()
+    {
+        $url = 'https://e00-ar-marca.uecdn.es/claro/assets/multimedia/imagenes/2021/05/09/16205852803700.jpg';
+        $file = '/tmp/image.jpg';
+        $seconds = 5;
+        // file_put_contents($file, file_get_contents($url));
+        $id = Yii::$app->queue->delay($seconds)->push(new CreateLogs([
+            'url' => $url,
+            'file' => $file,
+        ]));
+
+
+        VarDumper::dump( $id);
+        // echo ($id) ? "OK" : "KO";
+die;
+    }
+
     /**
      * Displays homepage.
      *
@@ -74,12 +94,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $seconds = 5;
-        Yii::$app->queue->push(new \frontend\controllers\DownloadJob([
-            'url' => 'https://e00-ar-marca.uecdn.es/claro/assets/multimedia/imagenes/2021/05/09/16205852803700.jpg',
-            'file' => '/tmp/image.jpg',
-        ]));
-
         return $this->render('index');
     }
 
