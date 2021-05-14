@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use app\jobs\CreateLogs;
+use common\jobs\JobTest;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -73,14 +74,16 @@ class SiteController extends Controller
     public function actionTest()
     {
         $url = 'https://e00-ar-marca.uecdn.es/claro/assets/multimedia/imagenes/2021/05/09/16205852803700.jpg';
-        $file = '/tmp/image.jpg';
-        $seconds = 5;
-        // file_put_contents($file, file_get_contents($url));
-        $id = Yii::$app->queue->delay($seconds)->push(new CreateLogs([
-            'url' => $url,
-            'file' => $file,
-        ]));
-
+        $file = 'image.jpg';
+        $seconds = 2;
+        $id = Yii::$app->queue->delay($seconds)->push(
+            new JobTest(
+                [
+                    'url' => $url,
+                    'file' => $file,
+                ]
+            )
+        );
 
         VarDumper::dump($id);
         die;
