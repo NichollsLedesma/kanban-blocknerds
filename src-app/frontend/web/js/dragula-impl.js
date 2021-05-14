@@ -1,5 +1,7 @@
-dragula([
-    document.getElementById("backlog"),
-    document.getElementById("todo"),
-    document.getElementById("doing")
-]);
+
+$(document).ready(function () {
+    dragula(
+        columns.map(column => document.getElementById(column))
+    );
+
+});
