@@ -76,7 +76,7 @@ class SiteController extends Controller
         $url = 'https://e00-ar-marca.uecdn.es/claro/assets/multimedia/imagenes/2021/05/09/16205852803700.jpg';
         $file = 'image.jpg';
         $seconds = 2;
-        $id = Yii::$app->queue->delay($seconds)->push(
+        $id = Yii::$app->queue1->push(
             new JobTest(
                 [
                     'url' => $url,

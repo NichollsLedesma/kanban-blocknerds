@@ -2,12 +2,13 @@
 
 use frontend\assets\DragulaAsset;
 use hail812\adminlte3\assets\AdminLteAsset;
+use yii\helpers\ArrayHelper;
 use yii\web\View;
 
 $this->registerAssetBundle(AdminLteAsset::class);
 $this->registerAssetBundle(DragulaAsset::class);
 
-$columns = ["backlog", "todo", "doing", "done"];
+$columns = ArrayHelper::getColumn($board['columns'], 'name');
 $this->registerJsVar('columns', $columns, View::POS_END);
 
 $this->registerJsFile(
@@ -17,6 +18,7 @@ $this->registerJsFile(
         'position' => View::POS_END
     ]
 );
+
 
 ?>
 
@@ -33,131 +35,36 @@ $this->registerJsFile(
     <section class="content pb-3">
         <div class="container-fluid h-100">
 
-            <div class="card card-row card-secondary">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        Backlog
-                    </h3>
-                </div>
-                <div class="card-body" id="backlog">
-                    <div class="card card-info card-outline task">
-                        <div class="card-header">
-                            <h5 class="card-title">Create Labels</h5>
-                            <div class="card-tools">
-                                <a href="#" class="btn btn-tool btn-link">#3</a>
-                                <a href="#" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox1" disabled>
-                                <label for="customCheckbox1" class="custom-control-label">Bug</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox2" disabled>
-                                <label for="customCheckbox2" class="custom-control-label">Feature</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox3" disabled>
-                                <label for="customCheckbox3" class="custom-control-label">Enhancement</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox4" disabled>
-                                <label for="customCheckbox4" class="custom-control-label">Documentation</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox5" disabled>
-                                <label for="customCheckbox5" class="custom-control-label">Examples</label>
-                            </div>
-                        </div>
+            <?php foreach ($board['columns'] as $column) { ?>
+                <div class="card card-row card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <?= $column['name'] ?>
+                        </h3>
                     </div>
-                    <div class="card card-primary card-outline task">
-                        <div class="card-header">
-                            <h5 class="card-title">Create Issue template</h5>
-                            <div class="card-tools">
-                                <a href="#" class="btn btn-tool btn-link">#4</a>
-                                <a href="#" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                </a>
+
+                    <div class="card-body" id="<?= $column['name'] ?>" data-column-id="<?= $column['id'] ?>">
+                        <?php foreach ($column['tasks'] as $task) { ?>
+                            <div class="card card-info card-outline task" id="<?= $task['id'] ?>">
+                                <div class="card-header">
+                                    <h5 class="card-title"><?= $task['name'] ?></h5>
+                                    <div class="card-tools">
+                                        <a href="#" class="btn btn-tool btn-link"><?= $task['id'] ?></a>
+                                        <a href="#" class="btn btn-tool">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p><?= $task['description'] ?></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox1_1" disabled>
-                                <label for="customCheckbox1_1" class="custom-control-label">Bug Report</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="customCheckbox1_2" disabled>
-                                <label for="customCheckbox1_2" class="custom-control-label">Feature Request</label>
-                            </div>
-                        </div>
+                        <?php } ?>
                     </div>
-                    <div class="card card-primary card-outline task">
-                        <div class="card-header">
-                            <h5 class="card-title">Create PR template</h5>
-                            <div class="card-tools">
-                                <a href="#" class="btn btn-tool btn-link">#6</a>
-                                <a href="#" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card card-light card-outline task">
-                        <div class="card-header">
-                            <h5 class="card-title">Create Actions</h5>
-                            <div class="card-tools">
-                                <a href="#" class="btn btn-tool btn-link">#7</a>
-                                <a href="#" class="btn btn-tool">
-                                    <i class="fas fa-pen"></i>
-                                </a>
-                            </div>
-
-                        </div>
-                        <div class="card-body">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                                Aenean commodo ligula eget dolor. Aenean massa.
-                                Cum sociis natoque penatibus et magnis dis parturient montes,
-                                nascetur ridiculus mus.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card card-row card-secondary">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        To Do
-                    </h3>
-                </div>
-                <div class="card-body" id="todo">
 
                 </div>
-            </div>
-            <div class="card card-row card-secondary">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        In progress
-                    </h3>
-                </div>
-                <div class="card-body" id="doing">
+            <?php } ?>
 
-                </div>
-            </div>
-            <div class="card card-row card-secondary">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        Done
-                    </h3>
-                </div>
-                <div class="card-body" id="done">
-
-                </div>
-            </div>
         </div>
     </section>
 </div>
