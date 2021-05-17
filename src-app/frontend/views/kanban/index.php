@@ -1,52 +1,14 @@
 <?php
 
+use frontend\assets\DragulaAsset;
+use hail812\adminlte3\assets\AdminLteAsset;
 use yii\web\View;
 
-$this->registerCssFile(Yii::$app->request->getBaseUrl() . '/plugins/fontawesome-free/css/all.min.css');
-$this->registerCssFile(Yii::$app->request->getBaseUrl() . '/plugins/ekko-lightbox/ekko-lightbox.css');
-$this->registerCssFile(Yii::$app->request->getBaseUrl() . '/plugins/dist/css/adminlte.min.css');
-$this->registerCssFile(Yii::$app->request->getBaseUrl() . '/plugins/overlayScrollbars/css/OverlayScrollbars.min.css');
-$this->registerCssFile(Yii::$app->request->getBaseUrl() . '/css/kanban.css');
-$this->registerCssFile(Yii::$app->request->getBaseUrl() . '/plugins/dragula/dragula.min.css');
+$this->registerAssetBundle(AdminLteAsset::class);
+$this->registerAssetBundle(DragulaAsset::class);
 
-$columns = ["backlog", "todo", "doing"];
+$columns = ["backlog", "todo", "doing", "done"];
 $this->registerJsVar('columns', $columns, View::POS_END);
-
-$this->registerJsFile(
-    Yii::$app->request->BaseUrl . '/plugins/ekko-lightbox/ekko-lightbox.min.js',
-    [
-        'depends' => "yii\web\JqueryAsset",
-        'position' => View::POS_END
-    ]
-);
-$this->registerJsFile(
-    Yii::$app->request->BaseUrl . '/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js',
-    [
-        'depends' => "yii\web\JqueryAsset",
-        'position' => View::POS_END
-    ]
-);
-$this->registerJsFile(
-    Yii::$app->request->BaseUrl . '/plugins/dist/js/adminlte.min.js',
-    [
-        'depends' => "yii\web\JqueryAsset",
-        'position' => View::POS_END
-    ]
-);
-$this->registerJsFile(
-    Yii::$app->request->BaseUrl . '/plugins/filterizr/jquery.filterizr.min.js',
-    [
-        'depends' => "yii\web\JqueryAsset",
-        'position' => View::POS_END
-    ]
-);
-$this->registerJsFile(
-    Yii::$app->request->BaseUrl . '/plugins/dragula/dragula.min.js',
-    [
-        'depends' => "yii\web\JqueryAsset",
-        'position' => View::POS_END
-    ]
-);
 
 $this->registerJsFile(
     Yii::$app->request->BaseUrl . '/js/dragula-impl.js',
@@ -57,19 +19,27 @@ $this->registerJsFile(
 );
 
 ?>
+
+<style>
+    .kanban {
+        height: 100% !important;
+        margin: 0 auto !important;
+    }
+</style>
+
 <h1>kandan</h1>
 
 <div class="content-wrapper kanban">
     <section class="content pb-3">
         <div class="container-fluid h-100">
 
-            <div class="card card-row card-secondary" >
+            <div class="card card-row card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">
                         Backlog
                     </h3>
                 </div>
-                <div class="card-body"  id="backlog">
+                <div class="card-body" id="backlog">
                     <div class="card card-info card-outline task">
                         <div class="card-header">
                             <h5 class="card-title">Create Labels</h5>
@@ -158,30 +128,36 @@ $this->registerJsFile(
                 </div>
             </div>
 
-            <div class="card card-row card-secondary" >
+            <div class="card card-row card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">
                         To Do
                     </h3>
                 </div>
-                <div class="card-body"  id="todo">
-                    
+                <div class="card-body" id="todo">
+
                 </div>
             </div>
-            <div class="card card-row card-secondary" >
+            <div class="card card-row card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">
                         In progress
                     </h3>
                 </div>
-                <div class="card-body"  id="doing">
-                    
+                <div class="card-body" id="doing">
+
                 </div>
             </div>
+            <div class="card card-row card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Done
+                    </h3>
+                </div>
+                <div class="card-body" id="done">
 
-
-
-
+                </div>
+            </div>
         </div>
     </section>
 </div>
