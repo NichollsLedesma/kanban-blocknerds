@@ -11,10 +11,10 @@ class DragulaAsset extends AssetBundle
 {
     public $sourcePath = '@frontend/assets/dragula';
     public $css = [
-        'dragula.min.css',
+        'css/dragula.min.css',
     ];
     public $js = [
-        'dragula.min.js'
+        'js/dragula.min.js'
     ];
     public $depends = [];
     public $publishOptions = [
