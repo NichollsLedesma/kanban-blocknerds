@@ -86,8 +86,8 @@ services:
       environment:
          TZ: America/Argentina/Buenos_Aires
       ports:
-         - '5672:49582'
          - '15692:15692'
+         - '15675:15675' 
       container_name: container_rabbitmq
       networks:
          - blocknerds-network
